@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Lista de Detalles de Compras</h2>
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>ID Compra</th>
+            <th>ID Producto</th>
+            <th>Cantidad Comprada</th>
+            <th>Precio Unitario</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for detalle_compra in detalle_compras %}
+        <tr>
+            <td>{{ detalle_compra.id_DetCompra }}</td>
+            <td>{{ detalle_compra.idCompra }}</td>
+            <td>{{ detalle_compra.idProducto }}</td>
+            <td>{{ detalle_compra.Cant_Comprada }}</td>
+            <td>{{ detalle_compra.Prec_uni }}</td>
+            <td>
+                <a href="{% url 'detalle_compras_edit' detalle_compra.id_DetCompra %}">Editar</a>
+                <a href="{% url 'detalle_compras_delete' detalle_compra.id_DetCompra %}">Eliminar</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<a href="{% url 'detalle_compras_create' %}">Crear nuevo Detalle de Compra</a>
+{% endblock %}

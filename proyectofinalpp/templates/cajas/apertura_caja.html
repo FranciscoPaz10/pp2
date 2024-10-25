@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Apertura de Caja{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/caja.css' %}">
+    <h1>Apertura de Caja</h1>
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary">Abrir Caja</button>
+    </form>
+{% endblock %}
+

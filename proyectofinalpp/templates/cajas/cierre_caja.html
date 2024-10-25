@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block title %}Cierre de Caja{% endblock %}
+
+{% block content %}
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Cierre de Caja</h1>
+
+        <!-- Mostrar mensajes de éxito o error -->
+        {% if messages %}
+            <div>
+                {% for message in messages %}
+                    <div class="alert {{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <!-- Formulario para cerrar la caja -->
+        <form method="POST">
+            {% csrf_token %}
+            <div class="mb-3">
+                {{ form.Fecha_Cierre.label_tag }} <!-- Etiqueta del campo Fecha_Cierre -->
+                {{ form.Fecha_Cierre }}  <!-- El campo de formulario para Fecha_Cierre -->
+            </div>
+            
+            <!-- Botón para cerrar la caja -->
+            <button type="submit" class="btn btn-primary btn-block">Cerrar Caja</button>
+        </form>
+
+        <!-- Botón para cancelar y volver al listado de cajas -->
+        <div class="mt-4 text-center">
+            <a href="{% url 'cajas_list' %}" class="btn btn-secondary">Cancelar y Volver</a>
+        </div>
+    </div>
+{% endblock %}
+

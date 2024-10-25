@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Lista de Cajas{% endblock %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/caja.css' %}">
+
+<a href="{% url 'cajas_create' %}" class="btn btn-success mb-3">Crear Caja</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Saldo Inicial</th>
+            <th>Fecha Apertura</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for caja in cajas %}
+        <tr>
+            <td>{{ caja.idCajas }}</td>
+            <td>{{ caja.Saldo_inicial }}</td>
+            <td>{{ caja.Fecha_Apertura }}</td>
+            <td>
+                <a href="{% url 'cajas_edit' caja.pk %}" class="btn btn-sm btn-warning">Editar</a>
+                <a href="{% url 'cajas_delete' caja.pk %}" class="btn btn-sm btn-danger">Eliminar</a>
+
+                <!-- Enlace para cerrar caja -->
+                {% if not caja.Fecha_Cierre %}
+                    <a href="{% url 'cierre_caja' caja.pk %}" class="btn btn-sm btn-primary">Cerrar Caja</a>
+                {% else %}
+                    <span class="text-muted">Caja Cerrada</span>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

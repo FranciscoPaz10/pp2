@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Lista de Proveedores</h2>
+<table>
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Nombre</th>
+            <th>CUIT</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for proveedor in proveedores %}
+        <tr>
+            <td>{{ proveedor.id_proveedor }}</td>
+            <td>{{ proveedor.Nombre }}</td>
+            <td>{{ proveedor.CUIT }}</td>
+            <td>
+                <a href="{% url 'proveedores_edit' proveedor.id_proveedor %}">Editar</a>
+                <a href="{% url 'proveedores_delete' proveedor.id_proveedor %}">Eliminar</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<a href="{% url 'proveedores_create' %}">Crear nuevo Proveedor</a>
+{% endblock %}

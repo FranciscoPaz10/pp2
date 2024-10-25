@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Eliminar Empleado</h2>
+<p>¿Estás seguro de que deseas eliminar el empleado con ID {{ object.id_Empleados }}?</p>
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">Confirmar</button>
+    <a href="{% url 'empleados_list' %}">Cancelar</a>
+</form>
+{% endblock %}

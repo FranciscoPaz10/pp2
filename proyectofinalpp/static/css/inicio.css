@@ -1,0 +1,73 @@
+/* Estilos generales */
+body {
+    background-color: #70A9F5; /* Fondo azul claro */
+}
+
+img {
+    width: 500px;
+    height: 500px;
+    display: block;
+    margin: 20px auto;
+}
+
+/* Estilos del menú */
+nav {
+    background-color: #ffffff;
+    padding: 10px;
+    text-align: center;
+}
+
+nav a, .dropbtn {
+    display: inline-block;
+    margin: 0 10px;
+    padding: 10px 15px;
+    color: black;
+    font-weight: bold;
+    background-color: white;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    font-family: inherit;
+    font-size: 16px;
+    text-decoration: underline; /* Subraya el texto */
+}
+
+nav a:hover, .dropdown:hover .dropbtn {
+    background-color: #8ba4ec;
+}
+
+/* Estilos del menú desplegable */
+.dropdown {
+    display: inline-block;
+    position: relative;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: underline; /* Asegura que los enlaces del dropdown también estén subrayados */
+    display: block;
+    text-align: left;
+}
+
+.dropdown-content a:hover {
+    background-color: #868788;
+}
+
+/* Muestra el contenido del menú desplegable al pasar el ratón */
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.dropbtn {
+    text-decoration: underline; /* Subraya también el botón del dropdown */
+}
+

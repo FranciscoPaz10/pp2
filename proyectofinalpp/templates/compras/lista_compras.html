@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block title %}Lista de Compras{% endblock %}
+
+{% block content %}
+<h2>Lista de Compras</h2>
+
+<a href="{% url 'compras_create' %}" class="btn btn-success mb-3">Crear Compra</a>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Producto</th>
+            <th>Cantidad</th>
+            <th>Total Compra</th>
+            <th>Acciones</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for compra in compras %}
+        <tr>
+            <td>{{ compra.idCompras }}</td>
+            <td>{{ compra.Producto }}</td>
+            <td>{{ compra.Cantidad }}</td>
+            <td>{{ compra.Total_compra }}</td>
+            <td>
+                <a href="{% url 'compras_edit' compra.pk %}" class="btn btn-sm btn-warning">Editar</a>
+                <a href="{% url 'compras_delete' compra.pk %}" class="btn btn-sm btn-danger">Eliminar</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% if not compras %}
+    <p class="text-muted">No hay compras registradas.</p>
+{% endif %}
+{% endblock %}
+

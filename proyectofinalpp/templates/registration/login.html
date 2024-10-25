@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Iniciar Sesión{% endblock %}
+
+{% block content %}
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+
+    <img src="{% static 'img/Logo Stay uff.png' %}" class="logo" alt="Logo Stay Puft">
+
+    <div class="login-container">
+        <h2>Inicio de sesión</h2>
+
+        {% if form.non_field_errors %}
+            <div class="alert alert-danger">
+                {{ form.non_field_errors }}
+            </div>
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+            <div class="form-group">
+                <input type="text" name="username" class="form-control" placeholder="Usuario" required>
+            </div>
+            <div class="form-group">
+                <input type="password" name="password" class="form-control" placeholder="Contraseña" required>
+            </div>
+            <button type="submit" class="login-button">Iniciar sesión</button>
+        </form>
+    </div>
+{% endblock %}
+
+

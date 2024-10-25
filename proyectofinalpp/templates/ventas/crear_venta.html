@@ -1,0 +1,236 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Crear Venta{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center">VENTA</h1>
+    <div class="card shadow-lg p-3 mb-5 bg-body rounded">
+        <div class="card-body">
+            <h2>Información Venta:</h2>
+            <form method="post">
+                {% csrf_token %}
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label for="id_fecha">Fecha:</label>
+                        {{ form.Fecha_hora_venta }}
+                    </div>
+                    <div class="col-md-4">
+                        <label for="id_garantia">Garantía:</label>
+                        {{ form.Garantias }}
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-8">
+                        <label for="id_productos">Producto:</label>
+                        {{ form.Productos }}
+                    </div>
+                    <div class="col-md-4">
+                        <button type="button" class="btn btn-light">
+                            <i class="fa fa-search"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-4">
+                        <label for="id_cantidad">Cantidad:</label>
+                        {{ form.Cantidad_vendida }}
+                    </div>
+                    <div class="col-md-4">
+                        <label for="id_precio_unitario">Precio Unitario:</label>
+                        {{ form.Precio_uni }}
+                    </div>
+                </div>
+
+                <button type="button" name="action" value="add" class="btn btn-primary" id="agregar-producto">AGREGAR</button>
+                <!-- Tabla con detalles -->
+                <div class="mt-4">
+                    <table id="Productos"  class="table table-bordered text-center">
+                        <thead>
+                            <tr>
+                                <th>Producto</th>
+                                <th>Marca</th>
+                                <th>Precio Unitario</th>
+                                <th>Cantidad</th>
+                                <th>Sub-total</th>
+                                <th>Eliminar</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for detalle in detalles %}
+                            <tr>
+                                <td>{{ detalle.producto }}</td>
+                                <td>{{ detalle.marca }}</td>
+                                <td>{{ detalle.precio_unitario }}</td>
+                                <td>{{ detalle.cantidad }}</td>
+                                <td>{{ detalle.sub_total }}</td>
+                                <td><button class="btn btn-danger">Eliminar</button>
+                                <input type="hidden" name="detalleProd_id" value="{{ detalle.id }}">
+                                <input type="hidden" name="cantidad_{{detalle.id}}" value="{{detalle.cantidad}}">
+                            </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Información final -->
+                <div class="row mt-4">
+                    <div class="col-md-4">
+                        <label for="id_metodo_pago">Método de Pago:</label>
+                        {{ form.Metodo_pago }}
+                    </div>
+                    <div class="col-md-4">
+                        <label>Total Factura:</label>
+                        <input type="text" id="Total_Factura" value="{{ total_factura }}" class="form-control" readonly>
+                    </div>
+                    <div class="col-md-4">
+                        <label>Importe Cobrado:</label>
+                        <input type="text" id="Importe_Cobrado"class="form-control">
+                    </div>
+                    <div class="col-md-4">
+                        <label>Cambio:</label>
+                        <input type="text"id="Importe_cambio" value="$ 00.000" class="form-control" readonly>
+                    </div>
+                </div>
+
+                <div class="text-center mt-4">
+                    <button type="submit" name="action" value="save" class="btn btn-success me-2">Guardar</button>
+                    <button type="button" class="btn btn-info">Imprimir</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Obtener los precios de los productos desde el contexto de Django (preprocesado por json.dumps)
+        var productosPrecios = JSON.parse('{{ productos_precios_json|escapejs }}');
+
+        // Obtener los elementos de los campos de productos y precio unitario
+        var productoSelect = document.getElementById('id_Productos');
+        var precioInput = document.getElementById('id_Precio_uni');
+
+        // Escuchar el evento "change" del campo de productos
+        productoSelect.addEventListener('change', function () {
+            var productoId = productoSelect.value;
+
+            // Si el producto seleccionado tiene un precio, actualizamos el campo de precio
+            if (productosPrecios[productoId]) {
+                precioInput.value = productosPrecios[productoId];
+            } else {
+                // Si no hay un precio, dejar el campo vacío o con un valor predeterminado
+                precioInput.value = '';
+            }
+        });
+    });
+    document.addEventListener('DOMContentLoaded', function () {
+    // Obtener el botón de agregar producto
+    var agregarProductoBtn = document.getElementById('agregar-producto');
+
+    // Obtener la tabla donde se añadirán los productos
+    var tablaDetalles = document.querySelector('.table tbody');
+
+    // Inicializar total factura
+    var totalFactura = 0;
+
+    // Función para actualizar el total en el campo correspondiente
+    function actualizarTotalFactura() {
+        // Obtener el campo de total factura y actualizar su valor
+        var totalFacturaInput = document.getElementById('Total_Factura');
+        totalFacturaInput.value = totalFactura.toFixed(2);  // Formatear a dos decimales
+    }
+
+    // Acción cuando el usuario haga clic en "AGREGAR"
+    agregarProductoBtn.addEventListener('click', function () {
+        // Obtener los valores de los campos del formulario
+        var productoSelect = document.getElementById('id_Productos');
+        var productoText = productoSelect.options[productoSelect.selectedIndex].text;
+        var marca = document.getElementById('id_Garantias').value;  // Supongo que el campo Garantias contiene la marca
+        var precioUnitario = parseFloat(document.getElementById('id_Precio_uni').value);
+        var cantidadVendida = parseInt(document.getElementById('id_Cantidad_vendida').value);
+
+        // Validar que los campos no estén vacíos
+        if (!productoText || !marca || isNaN(precioUnitario) || isNaN(cantidadVendida)) {
+            alert('Por favor, complete todos los campos antes de agregar.');
+            return;
+        }
+
+        // Calcular el subtotal
+        var subTotal = (precioUnitario * cantidadVendida).toFixed(2);
+
+        // Crear una nueva fila con los datos
+        var nuevaFila = `
+            <tr>
+                <td>${productoText}</td>
+                <td>${marca}</td>
+                <td>${precioUnitario.toFixed(2)}</td>
+                <td>${cantidadVendida}</td>
+                <td>${subTotal}</td>
+                <td><button class="btn btn-danger eliminar-producto">Eliminar</button>
+                <input type="hidden" name="detalleProd_id" value="${productoSelect.selectedIndex}">
+                <input type="hidden" name="cantidad_${productoSelect.selectedIndex}" value="${cantidadVendida}"></td>
+            </tr>
+        `;
+
+        // Añadir la nueva fila a la tabla
+        tablaDetalles.insertAdjacentHTML('beforeend', nuevaFila);
+
+        // Actualizar el total de la factura
+        totalFactura += parseFloat(subTotal);
+        actualizarTotalFactura();
+
+        // Limpiar los campos del formulario
+        document.getElementById('id_Precio_uni').value = '';
+        document.getElementById('id_Cantidad_vendida').value = '';
+        document.getElementById('id_Garantias').value = '';
+
+        // Añadir funcionalidad de eliminar para la nueva fila
+        agregarEliminarEvento();
+    });
+
+    // Función para agregar evento de eliminar a cada botón de "Eliminar"
+    function agregarEliminarEvento() {
+        var eliminarBtns = document.querySelectorAll('.eliminar-producto');
+        eliminarBtns.forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                // Eliminar la fila actual
+                var fila = this.closest('tr');
+                var subTotal = parseFloat(fila.cells[4].innerText);  // Obtener el subtotal de la fila
+                fila.remove();
+
+                // Actualizar el total de la factura
+                totalFactura -= subTotal;
+                actualizarTotalFactura();
+            });
+        });
+    }
+
+    // Inicializar los eventos de eliminar en las filas existentes
+    agregarEliminarEvento();
+    function calcularCambio() {
+        var totalFacturaInput = document.getElementById('Total_Factura');
+        var importeCobradoInput = document.getElementById('Importe_Cobrado');
+        var cambioInput = document.getElementById('Importe_cambio');
+
+        // Obtener los valores y parsear
+        var totalFactura = parseFloat(totalFacturaInput.value) || 0; // Manejar caso de que sea NaN
+        var importeCobrado = parseFloat(importeCobradoInput.value) || 0; // Manejar caso de que esté vacío
+
+        // Calcular el cambio
+        var cambio = importeCobrado - totalFactura;
+
+        // Actualizar el campo de cambio
+        cambioInput.value = `$ ${cambio.toFixed(2)}`; // Formato a dos decimales
+    }
+     // Añadir el evento input al campo de Importe Cobrado
+    var importeCobradoInput = document.getElementById('Importe_Cobrado');
+    importeCobradoInput.addEventListener('input', calcularCambio);
+});
+
+
+</script>
+{% endblock %}

@@ -1,0 +1,86 @@
+/* Configuración general para html y body */
+html, body {
+    margin: 0;
+    padding: 0;
+    background-color: #70A9F5; /* Color de fondo actualizado */
+    height: 100vh;
+    width: 100vw;
+    font-family: Arial, sans-serif;
+    position: relative;
+}
+
+/* Contenedor para el formulario */
+.login-container {
+    background-color: white;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    width: 600px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); /* Esto lo centra */
+}
+
+/* Logo ubicado en la esquina superior izquierda */
+.logo {
+    position: absolute;
+    top: 50px;
+    left: 50px;
+    width: 300px; /* Ajustar el tamaño del logo */
+    opacity: 0.7;
+}
+
+/* Título del formulario */
+h2 {
+    margin-bottom: 20px;
+    font-size: 24px;
+}
+
+/* Estilo para los campos de texto y contraseña */
+input[type="text"], input[type="password"] {
+    width: 100%;
+    padding: 15px;
+    margin: 15px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+/* Botón de inicio de sesión */
+.login-button {
+    background-color: #74b9ee; /* Color del botón */
+    color: white;
+    padding: 15px 0;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 18px;
+}
+
+/* Efecto hover para el botón */
+.login-button:hover {
+    background-color: #4589a0;
+}
+
+/* Estilo para el footer */
+footer {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background-color: transparent;
+    padding: 10px;
+}
+
+/* Texto del footer */
+footer p {
+    margin: 0;
+    font-size: 14px;
+    color: white;
+    text-align: right;
+    opacity: 0.8;
+}
+
+

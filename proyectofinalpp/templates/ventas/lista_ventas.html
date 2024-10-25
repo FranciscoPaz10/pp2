@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %}Ventas{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h2>Ventas</h2>
+
+    <a href="{% url 'ventas_create' %}" class="btn btn-success mb-3">Crear Venta</a>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Producto</th>
+                <th>Precio Unitario</th>
+                <th>Cantidad Vendida</th>
+                <th>Total Venta</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for venta in ventas %}
+            <tr>
+                <td>{{ venta.idVentas }}</td>
+                <td>{{ venta.Productos.Nombre }}</td> <!-- Asegúrate de que Productos sea el nombre correcto -->
+                <td>{{ venta.Precio_uni|floatformat:2 }}</td> <!-- Formateo a dos decimales -->
+                <td>{{ venta.Cantidad_vendida|floatformat:2 }}</td>
+                <td>{{ venta.Total_venta|floatformat:2 }}</td>
+                <td>
+                    <a href="{% url 'ventas_edit' venta.pk %}" class="btn btn-sm btn-warning">Editar</a>
+                    <a href="{% url 'ventas_delete' venta.pk %}" class="btn btn-sm btn-danger">Eliminar</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6" class="text-center">No hay ventas registradas.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
+
+
+
+
